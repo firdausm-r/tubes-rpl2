@@ -1,5 +1,4 @@
-<?php require_once('./config.php') ?>
- <?php require_once('inc/sess_auth.php') ?>
+<?php require_once('../config.php') ?>
 <!DOCTYPE html>
 <html lang="en" class="" style="height: auto;">
  <?php require_once('inc/header.php') ?>
@@ -26,8 +25,8 @@
   <!-- /.login-logo -->
   <div class="card card-navy my-2">
     <div class="card-body">
-      <p class="login-box-msg">Masukkan data kredensial anda</p>
-      <form id="ulogin-form" action="" method="post">
+      <p class="login-box-msg">Masukkan Data Kredensial (Admin)</p>
+      <form id="login-frm" action="" method="post">
         <div class="input-group mb-3">
           <input type="text" class="form-control" name="username" autofocus placeholder="Username">
           <div class="input-group-append">
@@ -46,14 +45,11 @@
         </div>
         <div class="row">
           <div class="col-8">
-            <a href="<?php echo base_url ?>">Halaman Utama</a>
+            <a href="<?php echo base_url ?>">Pergi ke halaman utama</a>
           </div>
           <!-- /.col -->
           <div class="col-4">
             <button type="submit" class="btn btn-primary btn-block">Masuk</button>
-          </div>
-          <div class="col-12 text-center">
-            <a href="<?php echo base_url ?>register.php">Buat Akun</a>
           </div>
           <!-- /.col -->
         </div>
@@ -81,56 +77,6 @@
 <script>
   $(document).ready(function(){
     end_loader();
-    
-    $('#ulogin-form').submit(function(e){
-        e.preventDefault()
-        var _this = $(this)
-        var el = $('<div>')
-            el.addClass('alert alert-danger err_msg')
-            el.hide()
-        $('.err_msg').remove()
-        if($('#password').val() != $('#cpassword').val()){
-            el.text('Password tidak cocok')
-            _this.prepend(el)
-            el.show('slow')
-            $('html, body').scrollTop(0)
-            return false;
-        }
-        if(_this[0].checkValidity() == false){
-            _this[0].reportValidity();
-            return false;
-        }
-        start_loader()
-        $.ajax({
-            url:_base_url_+"classes/Login.php?f=login_user",
-            method:'POST',
-            type:'POST',
-            data:new FormData($(this)[0]),
-            dataType:'json',
-            cache:false,
-            processData:false,
-            contentType: false,
-            error:err=>{
-                console.log(err)
-                alert('An error occurred')
-                end_loader()
-            },
-            success:function(resp){
-                if(resp.status == 'success'){
-                    location.href = ('./')
-                }else if(!!resp.msg){
-                    el.html(resp.msg)
-                    el.show('slow')
-                    _this.prepend(el)
-                    $('html, body').scrollTop(0)
-                }else{
-                    alert('An error occurred')
-                    console.log(resp)
-                }
-                end_loader()
-            }
-        })
-    })
   })
 </script>
 </body>
