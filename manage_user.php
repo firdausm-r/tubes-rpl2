@@ -18,15 +18,11 @@ if(isset($_GET['id'])){
 			<form action="" id="manage-user">	
 				<input type="hidden" name="id" value="<?= isset($meta['id']) ? $meta['id'] : '' ?>">
 				<div class="form-group">
-					<label for="name">First Name</label>
+					<label for="name">Nama Depan</label>
 					<input type="text" name="firstname" id="firstname" class="form-control" value="<?php echo isset($meta['firstname']) ? $meta['firstname']: '' ?>" required>
 				</div>
 				<div class="form-group">
-					<label for="name">Middle Name</label>
-					<input type="text" name="middlename" id="middlename" class="form-control" value="<?php echo isset($meta['middlename']) ? $meta['middlename']: '' ?>">
-				</div>
-				<div class="form-group">
-					<label for="name">Last Name</label>
+					<label for="name">Nama Belakang</label>
 					<input type="text" name="lastname" id="lastname" class="form-control" value="<?php echo isset($meta['lastname']) ? $meta['lastname']: '' ?>" required>
 				</div>
 				<div class="form-group">
@@ -37,21 +33,21 @@ if(isset($_GET['id'])){
 					<label for="password"><?= isset($meta['id']) ? "New" : "" ?> Password</label>
 					<input type="password" name="password" id="password" class="form-control" value="" autocomplete="off">
                     <?php if(isset($meta['id'])): ?>
-					<small><i>Leave this blank if you dont want to change the password.</i></small>
+					<small><i>Kosongkan jika tidak ingin mengganti password.</i></small>
                     <?php endif; ?>
 				</div>
                 <div class="form-group">
-                    <label for="type" class="control-label">Type</label>
+                    <label for="type" class="control-label">Tipe</label>
                     <select name="type" id="type" class="form-control form-control-sm rounded-0" required>
                     <option value="1" <?php echo isset($meta['type']) && $meta['type'] == 1 ? 'selected' : '' ?>>Administrator</option>
-                    <option value="2" <?php echo isset($meta['type']) && $meta['type'] == 2 ? 'selected' : '' ?>>Registered User</option>
+                    <option value="2" <?php echo isset($meta['type']) && $meta['type'] == 2 ? 'selected' : '' ?>>Staff</option>
                     </select>
                 </div>
 				<div class="form-group">
 					<label for="" class="control-label">Avatar</label>
 					<div class="custom-file">
 		              <input type="file" class="custom-file-input rounded-circle" id="customFile" name="img" onchange="displayImg(this,$(this))" accept="image/png, image/jpeg">
-		              <label class="custom-file-label" for="customFile">Choose file</label>
+		              <label class="custom-file-label" for="customFile">Pilih File Gambar</label>
 		            </div>
 				</div>
 				<div class="form-group d-flex justify-content-center">
@@ -63,8 +59,8 @@ if(isset($_GET['id'])){
 	<div class="card-footer">
 			<div class="col-md-12">
 				<div class="row">
-					<button class="btn btn-sm btn-primary rounded-0 mr-3" form="manage-user">Save User Details</button>
-					<a href="./?page=user/list" class="btn btn-sm btn-default border rounded-0" form="manage-user"><i class="fa fa-angle-left"></i> Cancel</a>
+					<button class="btn btn-sm btn-primary rounded-0 mr-3" form="manage-user">Simpan Detail User</button>
+					<a href="./?page=user/list" class="btn btn-sm btn-default border rounded-0" form="manage-user"><i class="fa fa-angle-left"></i> Batalkan</a>
 				</div>
 			</div>
 		</div>

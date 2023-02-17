@@ -1,6 +1,6 @@
 <?php 
 if(isset($_GET['id'])){
-    $qry = $conn->query("SELECT * FROM `post_list` where id= '{$_GET['id']}' ");
+    $qry = $conn->query("SELECT * FROM `post_list` where id= '{$_GET['id']}' and user_id = '{$_settings->userdata('id')}'");
     if($qry->num_rows > 0){
         foreach($qry->fetch_array() as $k => $v){
             if(!is_numeric($k)){
@@ -10,7 +10,6 @@ if(isset($_GET['id'])){
     }
 }
 ?>
-
 <style>
     .form-group.note-form-group.note-group-select-from-files {
         display: none;
@@ -20,18 +19,18 @@ if(isset($_GET['id'])){
     <div class="container">
         <div class="card rounded-0 shadow">
             <div class="card-header">
-                <h5 class="card-title"><?= !isset($id) ? "Add New Topic" : "Update Topic Details" ?></h5>
+                <h5 class="card-title"><?= !isset($id) ? "Tambah Topik Baru" : "Update Detail Topik" ?></h5>
             </div>
             <div class="card-body">
                 <div class="container-fluid">
                     <form action="" id="post-form">
                         <input type="hidden" name="id" value="<?= isset($id) ? $id : '' ?>">
                         <div class="form-group">
-                            <label for="title" class="control-label">Title</label>
+                            <label for="title" class="control-label">Judul</label>
                             <input type="text" class="form-control rounded-0" name="title" id="title" value="<?= isset($title) ? $title : "" ?>">
                         </div>
                         <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12 px-0">
-                            <label for="category_id" class="control-label">Category</label>
+                            <label for="category_id" class="control-label">Kategori</label>
                             <select class="form-control rounded-0" name="category_id" id="category_id">
                                 <option value="" disabled <?= !isset($category_id) ? "selected" : '' ?>></option>
                                 <?php 
@@ -43,7 +42,7 @@ if(isset($_GET['id'])){
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="content" class="control-label">Content</label>
+                            <label for="content" class="control-label">Konten</label>
                             <textarea type="text" class="form-control rounded-0" name="content" id="content"><?= isset($content) ? $content : "" ?></textarea>
                         </div>
                         <div class="form-group">
@@ -52,14 +51,14 @@ if(isset($_GET['id'])){
                                 <label for="status">
                                 </label>
                             </div>
-                            <label for="status" class="control-label">Published</label>
+                            <label for="status" class="control-label">Publikasikan</label>
                         </div>
                     </form>
                 </div>
             </div>
             <div class="card-footer py-1 text-center">
-                <button class="btn btn-flat btn-sm btn-primary bg-gradient-primary rounded-0" form="post-form"><i class="fa fa-save"></i> Save</button>
-                <a class="btn btn-flat btn-sm btn-light bg-gradient-light border rounded-0" href="./?p=posts"><i class="fa fa-angle-left"></i> Cancel</a>
+                <button class="btn btn-flat btn-sm btn-primary bg-gradient-primary rounded-0" form="post-form"><i class="fa fa-save"></i> Simpan</button>
+                <a class="btn btn-flat btn-sm btn-light bg-gradient-light border rounded-0" href="./?p=posts"><i class="fa fa-angle-left"></i> Batalkan</a>
             </div>
         </div>
     </div>
@@ -67,13 +66,13 @@ if(isset($_GET['id'])){
 <script>
     $(function(){
         $('#category_id').select2({
-            placeholder:"Please Select Category Here",
+            placeholder:"Pilih Kategori Postingan",
             width:'100%',
             containerCssClass:'form-control rounded-0'
         })
         $('#content').summernote({
             height:"20em",
-            placeholder:"Write your content here",
+            placeholder:"Ketikkan Konten Disini",
             toolbar: [
                 [ 'style', [ 'style' ] ],
                 [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
@@ -114,7 +113,7 @@ if(isset($_GET['id'])){
                 },
                 success:function(resp){
                     if(resp.status == 'success'){
-                    location.replace('./?page=posts/view_post&id='+resp.pid)
+                    location.replace('./?p=posts/view_post&id='+resp.pid)
                     }else if(!!resp.msg){
                         el.html(resp.msg)
                         el.show('slow')

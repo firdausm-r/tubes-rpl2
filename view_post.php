@@ -23,79 +23,87 @@ if(isset($_GET['id'])){
         object-position:center center;
     }
 </style>
-<div class="card card-outline card-navy rounded-0 shadow">
-    <div class="card-header">
-        <h4 class="card-title">Post Details</h4>
-        <div class="card-tools">
-            <a href="./?page=posts/manage_post&id=<?= $id ?>" class="btn btn-sm btn-flat bg-gradient-primary btn-primary"><i class="fa fa-edit"></i> Edit Post</a>
-            <button type="button" id="delete_post" class="btn btn-sm btn-flat bg-gradient-danger btn-danger"><i class="fa fa-trash"></i> Delete</button>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="contrain-fluid">
-            <?php if($_settings->userdata('id') == $user_id): ?>
-            <div class="mb-2 text-right">
-                <?php if($status == 1): ?>
-                    <small class="badge badge-light border text-dark rounded-pill px-3"><i class="fa fa-circle text-primary"></i> Published</small>
-                <?php else: ?>
-                    <small class="badge badge-light border text-dark rounded-pill px-3"><i class="fa fa-circle text-secondary"></i> Unpublished</small>
+<div class="section py-5">
+    <div class="container">
+        <div class="card rounded-0 shadow">
+            <div class="card-header">
+                <h4 class="card-title">Post Details</h4>
+                <?php if($_settings->userdata('id') == $user_id): ?>
+                    <div class="card-tools">
+                        <a href="./?p=posts/manage_post&id=<?= $id ?>" class="btn btn-sm btn-flat bg-gradient-primary btn-primary"><i class="fa fa-edit"></i> Edit Post</a>
+                        <button type="button" id="delete_post" class="btn btn-sm btn-flat bg-gradient-danger btn-danger"><i class="fa fa-trash"></i> Delete</button>
+                    </div>
                 <?php endif; ?>
             </div>
-            <?php endif; ?>
-            <div style="line-height:1em" class="mb-3">
-                <h2 class="font-weight-bold mb-0 border-bottom"><?= $title ?></h2>
-                <div class="py-1">
-                    <small class="badge badge-light border text-dark rounded-pill px-3 me-2"><i class="far fa-circle"></i> <?= $category ?></small>
-                    <span class="me-2"><img src="<?= validate_image($avatar) ?>" alt="" class="img-thumbnail border border-dark post-user rounded-circle p-0"></span>
-                    <span class=""><?= $username ?></span>
-                </div>
-            </div>
-            <div>
-                <?= $content ?>
-            </div>
-            <hr class="mx-n3">
-            <h4 class="font-weight-bolder">Comments:</h4>
-            <div class="list-group comment-list mb-3 rounded-0">
-                <?php 
-                $comments = $conn->query("SELECT c.*, u.username, u.avatar FROM `comment_list` c inner join `users` u on c.user_id = u.id where c.post_id ='{$id}' order by abs(unix_timestamp(c.date_created)) asc ");
-                while($row = $comments->fetch_assoc()):
-                ?>
-                <div class="list-group-item list-group-item-action mb-1 border-top">
-                    <div class="d-flex align-items-center w-100">
-                        <div class="col-auto">
-                            <img src="<?= validate_image($row['avatar']) ?>" alt="" class="comment-user rounded-circle img-thumbnail p-0 border">
+            <div class="card-body">
+                <div class="contrain-fluid">
+                    <?php if($_settings->userdata('id') == $user_id): ?>
+                    <div class="mb-2 text-right">
+                        <?php if($status == 1): ?>
+                            <small class="badge badge-light border text-dark rounded-pill px-3"><i class="fa fa-circle text-primary"></i> Published</small>
+                        <?php else: ?>
+                            <small class="badge badge-light border text-dark rounded-pill px-3"><i class="fa fa-circle text-secondary"></i> Unpublished</small>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+                    <div style="line-height:1em" class="mb-3">
+                        <h2 class="font-weight-bold mb-0 border-bottom"><?= $title ?></h2>
+                        <div class="py-1">
+                            <small class="badge badge-light border text-dark rounded-pill px-3 me-2"><i class="far fa-circle"></i> <?= $category ?></small>
+                            <span class="me-2"><img src="<?= validate_image($avatar) ?>" alt="" class="img-thumbnail border border-dark post-user rounded-circle p-0"></span>
+                            <span class=""><?= $username ?></span>
                         </div>
-                        <div class="col-auto flex-shrink-1 flex-grow-1">
-                            <div style="line-height:1em">
-                                <div class="font-weight-bolder"><?= $row['username'] ?></div>
-                                <div><small class="text-muted"><i><?= date("Y-m-d h:i a", strtotime($row['date_created'])) ?></i></small></div>
+                    </div>
+                    <div>
+                        <?= $content ?>
+                    </div>
+                    <hr class="mx-n3">
+                    <h4 class="font-weight-bolder">Comments:</h4>
+                    <div class="list-group comment-list mb-3 rounded-0">
+                        <?php 
+                        $comments = $conn->query("SELECT c.*, u.username, u.avatar FROM `comment_list` c inner join `users` u on c.user_id = u.id where c.post_id ='{$id}' order by abs(unix_timestamp(c.date_created)) asc ");
+                        while($row = $comments->fetch_assoc()):
+                        ?>
+                        <div class="list-group-item list-group-item-action mb-1 border-top">
+                            <div class="d-flex align-items-center w-100">
+                                <div class="col-auto">
+                                    <img src="<?= validate_image($row['avatar']) ?>" alt="" class="comment-user rounded-circle img-thumbnail p-0 border">
+                                </div>
+                                <div class="col-auto flex-shrink-1 flex-grow-1">
+                                    <div style="line-height:1em">
+                                        <div class="font-weight-bolder"><?= $row['username'] ?></div>
+                                        <div><small class="text-muted"><i><?= date("Y-m-d h:i a", strtotime($row['date_created'])) ?></i></small></div>
+                                    </div>
+                                </div>
+                                <?php if($row['user_id'] == $_settings->userdata('id')): ?>
+                                    <a href="javascript:void(0)" class="text-danger text-decoration-none delete-comment" data-id = '<?= $row['id'] ?>'><i class="fa fa-trash"></i></a>
+                                <?php endif; ?>
+                            </div>
+                            <hr>
+                            <div><?= $row['comment'] ?></div>
+                        </div>
+                        <?php endwhile; ?>
+                    </div>
+                    <?php if($_settings->userdata('id') == ''): ?>
+                        <h5 class="text-center text-muted"><i>Login to Post a Comment</i></h5>
+                    <?php else: ?>
+                    <div class="card rounded-0 shadow">
+                        <div class="card-body">
+                            <div class="container-fluid">
+                                <form action="" id="comment-form">
+                                    <input type="hidden" name="post_id" value="<?= $id ?>">
+                                    <textarea class="form-control form-control-sm rouned-0" name="comment" id="comment" rows="4" placeholder="Write your comment here"></textarea>
+                                </form>
                             </div>
                         </div>
-                        <a href="javascript:void(0)" class="text-danger text-decoration-none delete-comment" data-id = '<?= $row['id'] ?>'><i class="fa fa-trash"></i></a>
+                        <div class="card-footer py-1 text-right">
+                                <button class="btn btn-primary btn-flat btn-sm bg-gradient-primary" form="comment-form"><i class="fa fa-save"></i> Save</button>
+                                <button class="btn btn-light btn-flat btn-sm bg-gradient-light border" type="reset" form="comment-form">Cancel</button>
+                        </div>
                     </div>
-                    <hr>
-                    <div><?= $row['comment'] ?></div>
-                </div>
-                <?php endwhile; ?>
-            </div>
-            <?php if($_settings->userdata('id') == ''): ?>
-                <h5 class="text-center text-muted"><i>Login to Post a Comment</i></h5>
-            <?php else: ?>
-            <div class="card rounded-0 shadow">
-                <div class="card-body">
-                    <div class="container-fluid">
-                        <form action="" id="comment-form">
-                            <input type="hidden" name="post_id" value="<?= $id ?>">
-                            <textarea class="form-control form-control-sm rouned-0" name="comment" id="comment" rows="4" placeholder="Write your comment here"></textarea>
-                        </form>
-                    </div>
-                </div>
-                <div class="card-footer py-1 text-right">
-                        <button class="btn btn-primary btn-flat btn-sm bg-gradient-primary" form="comment-form"><i class="fa fa-save"></i> Save</button>
-                        <button class="btn btn-light btn-flat btn-sm bg-gradient-light border" type="reset" form="comment-form">Cancel</button>
+                    <?php endif; ?>
                 </div>
             </div>
-            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -178,7 +186,7 @@ if(isset($_GET['id'])){
 			},
 			success:function(resp){
 				if(typeof resp== 'object' && resp.status == 'success'){
-					location.replace('./?page=posts');
+					location.replace('./?p=posts');
 				}else{
 					alert_toast("An error occured.",'error');
 					end_loader();
